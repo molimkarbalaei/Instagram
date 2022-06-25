@@ -1,4 +1,4 @@
-
+export function seedDatabase(firebase) {
   const users = [
     {
       userId: "JAGrGo7STLcjcLNngSJRhDP9fAl2",

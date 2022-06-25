@@ -3,11 +3,21 @@ import "firebase/firestore";
 import "firebase/auth";
 //**
 // here i want to import the seed file:
-
+// import { seedDatabase } from "../seed";
 // becuase we need to connect our database so we need config:
-const config = {};
+const config = {
+  apiKey: "AIzaSyAfovnzaiBGZAxV7ysGeZAUPU_GNQWDKz4",
 
-console.log(Firebase);
+  authDomain: "instagram-4e58f.firebaseapp.com",
+
+  projectId: "instagram-4e58f",
+
+  storageBucket: "instagram-4e58f.appspot.com",
+
+  messagingSenderId: "174380937246",
+
+  appId: "1:174380937246:web:ed3fc44669166ba03b3e0f",
+};
 
 const firebase = Firebase.initializeApp(config);
 const { FieldValue } = Firebase.firestore;
@@ -18,4 +28,5 @@ const { FieldValue } = Firebase.firestore;
 //if your models and associations are working the way you want them to.
 // seedDatabase(firebase);
 
+console.log("firebase", firebase);
 export { firebase, FieldValue };
