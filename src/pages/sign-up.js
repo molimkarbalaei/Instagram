@@ -5,10 +5,16 @@ import { Link, useNavigate } from "react-router-dom";
 // import { DASHBOARD } from "../constants/routes";
 import FirebaseContext from "../context/firebase";
 import * as ROUTES from "../constants/routes"; // bring all the routes to this file
+import { doesUsernameExist } from "../services/firebase";
 
-export default function Login() {
+export default function SignUp() {
+  // general for all pages:
   const navigate = useNavigate();
   const { firebase } = React.useContext(FirebaseContext);
+
+  // for signing up:
+  const [username, setUsername] = React.useState("");
+  const [fullName, setFullName] = React.useState("");
 
   // for importing email and password:
   const [emailAddress, setEmailAddress] = React.useState("");
@@ -18,26 +24,57 @@ export default function Login() {
   const isInvalid = password === "" || emailAddress === "";
 
   // some actions if we submit click:  2---
-  const handLogin = async (event) => {
+  const handSignup = async (event) => {
     //a) prevent the default behavior of the form:
     event.preventDefault();
-    //b) login with email and password byt trytes and catch:
-    try {
-      await firebase.auth().signInWithEmailAndPassword(emailAddress, password);
-      //c) if we are logged in, navigate to the home page:
-      navigate(ROUTES.DASHBOARD);
-    } catch (error) {
-      //d) if we are not logged in, set the error message:
-      setEmailAddress("");
-      setPassword("");
-      setError(error.message);
+    //b) if the username is taken:
+
+    const usernameExists = await doesUsernameExist(username);
+    if (!usernameExists) {
+      try {
+        // so if it exists we will have error:
+        const createdUserResult = await firebase
+          .auth()
+          .createUserWithEmailAndPassword(emailAddress, password);
+
+        // authenticate the user:
+        // => email and password are correct & username (displayName)
+        await createdUserResult.user.updateProfile({
+          displayName: username,
+        });
+
+        //firebase user collection (create a document)
+        await firebase
+          .firestore()
+          .collection("users")
+          .add({
+            userId: createdUserResult.user.uid,
+            username: username.toLowerCase(),
+            fullName,
+            emailAddress: emailAddress.toLowerCase(),
+            following: ["2"],
+            followers: [],
+            dateCreated: Date.now(),
+          });
+        // navigate to the dashboard:
+        navigate(ROUTES.DASHBOARD);
+
+        // if it doesn't exist:
+      } catch (error) {
+        setError(error.message);
+        setFullName("");
+        setEmailAddress("");
+        setPassword("");
+      }
+    } else {
+      setError("Username already exists");
     }
   };
 
   // useeffect for checking if we are logged in:
 
   useEffect(() => {
-    document.title = "Login - Instagram";
+    document.title = "Sign Up - Instagram";
   }, []);
 
   //********** */ we need for login:********
@@ -71,13 +108,33 @@ export default function Login() {
           {error && <p className="mb-4 text-xs text-red-600">{error}</p>}
 
           {/* form submit: */}
-          <form onSubmit={handLogin} method="POST">
+          <form onSubmit={handSignup} method="POST">
+            {/* Sign up: 1/ username: */}
+            <input
+              aria-label="Enter your userName"
+              type="username"
+              placeholder="UserName"
+              className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-300 rounded mb-2"
+              onChange={({ target }) => setUsername(target.value)}
+              value={username}
+            />
+            {/* Sign up: 2/ full name: */}
+            <input
+              aria-label="Enter your FullName"
+              type="fullName"
+              placeholder="FullName"
+              className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-300 rounded mb-2"
+              onChange={({ target }) => setFullName(target.value)}
+              value={fullName}
+            />
+
             <input
               aria-label="Enter your email address"
               type="email"
               placeholder="Email address"
               className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-300 rounded mb-2"
               onChange={({ target }) => setEmailAddress(target.value)}
+              value={emailAddress}
             />
             {/* password */}
             <input
@@ -86,6 +143,7 @@ export default function Login() {
               placeholder="Password"
               className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-300 rounded mb-2"
               onChange={({ target }) => setPassword(target.value)}
+              value={password}
             />
             {/* if u don't have account we need a button for creating */}
             <button
@@ -94,17 +152,17 @@ export default function Login() {
               className={`bg-blue-700 text-white w-full rounded h-8 font-bold
                 ${isInvalid && "opacity-60"}`} // if is invalid give opacity 50
             >
-              Log In
+              Sign Up
             </button>
           </form>
         </div>
         <div className="flex justify-center items-center flex-col w-full bg-white p-4 rounded border border-gray-300">
           <p className="text-sm">
-            Don't have an account?{` `}
+            Have an account?{` `}
             {/* this `` with 2 space= ke biad paeen. */}
             {/* we need a signup page: */}
-            <Link to={ROUTES.SIGN_UP} className="font-bold text-blue-500">
-              Sign Up
+            <Link to={ROUTES.LOGIN} className="font-bold text-blue-500">
+              Login
             </Link>
           </p>
         </div>
@@ -113,21 +171,6 @@ export default function Login() {
   );
 }
 
-// 1--- login page:
-// so we use useHistory because when we login go to dashboard.
-// we need to acces to firebase
-
-//TODO****** add to tailwind config:
-// we have to build these in tailwind:
-// bg-blue-medium
-// text-blue-medium
-// text-red-primary  => hex values
-// text-gray-base
-//border - gray - primary;
-// bg-blue-medium
-
-//  2--- we need to add login handler and that item.
-// we need to add a login handler:
-// by using navigate and firebase.
-
 // here the login page finished.************
+
+// now we need to create a signup page
