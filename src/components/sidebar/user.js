@@ -19,16 +19,22 @@ const User = ({ username, fullName }) =>
         <img
           src={`/images/avatars/${username}.jpg`}
           alt=""
-          className="rounded-full w-16 flex mr-3 border-radius: 9999px "
+          className="rounded-full w-16 flex mr-3  "
         />
-        <p> {username} </p>
+      </div>
+      {/* we need username besides the img*/}
+      <div>
+        <div className="col-span-3 ml-2 ">
+          {/* chon grid-cols-4  ====> col-span-1 ro zadim */}
+          <p className="text-sm font-bold">{username}</p>
+          <p className="text-sm ">{fullName}</p>
+        </div>
       </div>
     </Link>
   );
 
+export default User;
 User.propTypes = {
   username: PropTypes.string,
   fullName: PropTypes.string,
 };
-
-export default User;
