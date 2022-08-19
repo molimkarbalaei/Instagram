@@ -1,4 +1,4 @@
-import { firebase } from "../lib/firebase";
+import { FieldValue, firebase } from "../lib/firebase";
 
 export async function doesUsernameExist(username) {
   const result = await firebase
@@ -52,26 +52,54 @@ export async function getUserByUserId(userId) {
 export async function getSuggestedProfiles(userId, following) {
   const result = await firebase.firestore().collection("users").limit(10).get();
 
-  return result.docs
-    .map((user) => ({ ...user.data(), docId: user.id }))
-    .filter(
-      (profile) =>
-        profile.userId !== userId && !following.includes(profile.userId)
-    );
+  return (
+    result.docs
+      // firstly get all the users:
+      .map((user) => ({ ...user.data(), docId: user.id }))
+      // then make sure that the user is not the same as the logged in user:
+      .filter(
+        (profile) =>
+          profile.userId !== userId && !following.includes(profile.userId)
+      )
+  );
 }
-//   let query = firebase.firestore().collection("users");
 
-//   if (following.length > 0) {
-//     query = query.where("userId", "not-in", [...following, userId]);
-//   } else {
-//     query = query.where("userId", "!=", userId);
-//   }
-//   const result = await query.limit(10).get();
+//updateLoggedInUserFollowing:
+export async function updateLoggedInUserFollowing(
+  loggedInUserDocId, // currently logged in user documentation id(molim)
+  profileId, // the user that molim requested to follow
+  isFollowingProfile // true or false
+) {
+  return firebase
+    .firestore()
+    .collection("users")
+    .doc(loggedInUserDocId)
+    .update({
+      //i wanna update following:
+      // do we follow it already?
+      following: isFollowingProfile
+        ? FieldValue.arrayRemove(profileId)
+        : //if not following the profile:
+          FieldValue.arrayUnion(profileId),
+    });
+}
 
-//   const profiles = result.docs.map((user) => ({
-//     ...user.data(),
-//     docId: user.id,
-//   }));
-
-//   return profiles;
-// }
+// updateFollowedUserFollowers:
+export async function updateFollowedUserFollowers(
+  profileDocId,
+  loggedInUserDocId,
+  isFollowingProfile /// true/false (am i currently following this person?)
+) {
+  return firebase
+    .firestore()
+    .collection("users")
+    .doc(profileDocId) // suggested profile id
+    .update({
+      //i wanna update following:
+      // do we follow it already?
+      followers: isFollowingProfile
+        ? FieldValue.arrayRemove(loggedInUserDocId)
+        : //if not following the profile:
+          FieldValue.arrayUnion(loggedInUserDocId),
+    });
+}
