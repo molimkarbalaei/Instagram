@@ -4,18 +4,20 @@ import { useRef } from "react";
 // we would pass content down:
 import PropTypes from "prop-types";
 import Header from "./header";
+import Image from "./image";
 
 export default function Post({ content }) {
   // component:
-  // 1-header,
+  // 1- header
   // 2- images
   // 3- actions like===>like and comment icons
   // 4- footer
   // 5- comments
   return (
-    <div className="border rounded col-span-4 bg-white border-gray-200 mb-16">
+    //1- header of posts: user pic and name:
+    <div className="border rounded col-span-4 bg-white border-gray-200 mb-12">
       <Header username={content.username} />
-      {/* // esm va akse raphael */}
+      <Image src={content.imageSrc} caption={content.caption} />
     </div>
   );
 }
