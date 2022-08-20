@@ -6,3 +6,22 @@ I used Tailwind CSS for this project and I really enjoyed using it. I used style
 
 
 I clone Instagram by seeing karl's videos(https://www.youtube.com/watch?v=mDgEqoQUBgk).
+
+Client side rendered app: react (cra)
+---> our database is on firebase
+---> external dependency: react-loading-skeleton
+
+styling ---> tailwindcss
+
+
+Architecture:
+in src:
+---> components
+---> constants
+---> contex ->root
+---> helpers,
+---> hooks
+---> pages
+---> lib (firebase is going to live in here)
+---> services (firebase functions in here)
+---> styles (tailwindcss folder(app/tailwind))
