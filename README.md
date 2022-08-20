@@ -20,7 +20,7 @@ Architecture:
 
 in src:
 
----> components
+---> components----> 1-posts, 2- sidebar
 
 ---> constants
 
