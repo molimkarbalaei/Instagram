@@ -13,13 +13,13 @@ const User = ({ username, fullName }) =>
     <Skeleton count={1} height={61} />
   ) : (
     // if we have user info:
-    <Link to={`/p/${username}`} className="grid grid-cols-4 mb-4 items-center">
+    <Link to={`/p/${username}`} className="grid grid-cols-4 mb-6 items-center ">
       {/* we want to put my picture */}
       <div className="flex items-center justify-between col-span-1">
         <img
           src={`/images/avatars/${username}.jpg`}
           alt=""
-          className="rounded-full w-16 flex mr-3  "
+          className="rounded-full w-16 flex mr-3"
         />
       </div>
       {/* we need username besides the img*/}

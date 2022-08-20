@@ -103,3 +103,37 @@ export async function updateFollowedUserFollowers(
           FieldValue.arrayUnion(loggedInUserDocId),
     });
 }
+
+//getPhotos
+export async function getPhotos(userId, following) {
+  const result = await firebase
+    .firestore()
+    .collection("photos")
+    // my userid is in following:
+    .where("userId", "in", following)
+    .get();
+  const userFollowedPhotos = result.docs.map((photo) => ({
+    ...photo.data(),
+    docId: photo.id,
+  }));
+
+  // console.log("userFollowedPhotos", userFollowedPhotos);
+  // we don't have any data that say: ok has x person liked that paticular photo:
+  // so we can check this:
+  const photoWithUserDetails = await Promise.all(
+    userFollowedPhotos.map(async (photo) => {
+      // we wanna loop over these photos and avalesh ke like nakardim!:
+      let userLikedPhoto = false;
+      if (photo.likes.includes(userId)) {
+        //my user id
+        userLikedPhoto = true; // you turn it to true
+      }
+      // photo.userId = 2 for raphael
+      const user = await getUserByUserId(photo.userId);
+      const { username } = user[0];
+      // we have to return all of them
+      return { username, ...photo, userLikedPhoto }; // userLikedPhoto is boolian
+    })
+  );
+  return photoWithUserDetails;
+}

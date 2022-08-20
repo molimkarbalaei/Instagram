@@ -27,3 +27,4 @@ export default function Timeline() {
   );
 }
 // we rerutn back photos as an obj and u have photos inside and inside photos you have array.
+// we commit it again
