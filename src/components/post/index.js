@@ -5,8 +5,13 @@ import { useRef } from "react";
 import PropTypes from "prop-types";
 import Header from "./header";
 import Image from "./image";
+import Actions from "./actions";
 
 export default function Post({ content }) {
+  //focus:
+  const commentInput = useRef(null);
+  const handleFocus = () => commentInput.current.focus();
+
   // component:
   // 1- header
   // 2- images
@@ -18,6 +23,12 @@ export default function Post({ content }) {
     <div className="border rounded col-span-4 bg-white border-gray-200 mb-12">
       <Header username={content.username} />
       <Image src={content.imageSrc} caption={content.caption} />
+      <Actions
+        docId={content.docId}
+        totalLikes={content.likes.length}
+        likedPhoto={content.userLikedPhoto}
+        handleFocus={handleFocus}
+      />
     </div>
   );
 }
