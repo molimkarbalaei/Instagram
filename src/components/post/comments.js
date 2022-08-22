@@ -4,6 +4,7 @@ import { formatDistance } from "date-fns";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import AddComment from "./add-comment";
 
 // posted : when it posted
 // we have comments::::::
@@ -14,6 +15,7 @@ export default function Comments({
   posted,
   commontInput,
 }) {
+  // showing all comments:
   const [comments, setComments] = useState(allComments);
   return (
     <>
@@ -36,15 +38,20 @@ export default function Comments({
           {formatDistance(posted, new Date())} ago
         </p>
       </div>
+      {/* Add a comment need to acces to firestore: */}
+      <AddComment
+        docId={docId}
+        comments={comments}
+        setComments={setComments}
+        commentInput={commontInput}
+      />
     </>
   );
-
-  //Add a comment need to acces to firestore:
 }
 
 Comments.propTypes = {
   docId: PropTypes.string.isRequired,
   comments: PropTypes.array.isRequired,
   posted: PropTypes.number.isRequired,
-  commentInput: PropTypes.object.isRequired,
+  commontInput: PropTypes.object,
 };

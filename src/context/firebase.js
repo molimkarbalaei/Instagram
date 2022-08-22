@@ -1,5 +1,5 @@
 import { createContext } from "react";
-
+// in baraye frestadane data toye firebase
 const FirebaseContext = createContext(null);
 export default FirebaseContext;
 
