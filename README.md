@@ -12,7 +12,7 @@ I clone Instagram by seeing karl's videos(<https://www.youtube.com/watch?v=mDgEq
 
 in src:
 
-- components:
+- **components:**
 
   1. posts
   1. sidebar
@@ -35,8 +35,10 @@ in src:
 
 Client side rendered app: react (cra)
 
----> our database is on firebase
+- our database is on firebase
 
----> external dependency: react-loading-skeleton
+- xternal dependency: react-loading-skeleton
 
-styling ---> tailwindcss
+**styling:**
+
+- tailwindcss
