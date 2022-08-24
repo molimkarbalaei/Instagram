@@ -10,7 +10,6 @@ import { Link, Navigate } from "react-router-dom";
 export default function Header() {
   const { user } = useContext(UserContext);
   const { firebase } = useContext(FirebaseContext);
-  console.log("user", user);
 
   return (
     <header className="h-16 bg-white border-b border-gray mb-8">

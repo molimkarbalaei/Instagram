@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import * as ROUTES from "./constants/routes";
 import UserContext from "./context/user";
+// import ProtectedRoute from "./helpers/protected-route";
 import useAuthListener from "./hook/use-auth-listener";
 
 // for swithching between pages: use lazy
@@ -25,6 +26,11 @@ function App() {
           <Routes>
             <Route exact path={ROUTES.LOGIN} element={<Login />} />
             <Route exact path={ROUTES.SIGN_UP} element={<SignUp />} />
+
+            {/* <Route exact path="/" element={<ProtectedRoute />}>
+              <Route exact path="/" element={<Dashboard />} />
+            </Route> */}
+
             <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
             {/*  this * is for go to anyyyy  not found page */}
             <Route path="*" element={<NotFound />} />
