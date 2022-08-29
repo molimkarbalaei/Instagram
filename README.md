@@ -8,10 +8,6 @@ I used Tailwind CSS for this project and I really enjoyed using it. I used style
 
 ---
 
-I used Tailwind CSS for this project and I really enjoyed using it. I used styled components in my previous project, but I have now converted all my projects to Tailwind CSS for ease of use.
-
----
-
 ## Source
 
 I clone Instagram by seeing karl's videos(<https://www.youtube.com/watch?v=mDgEqoQUBgk>).
